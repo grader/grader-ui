@@ -1,2 +1,2 @@
 # grader-ui
-Artificial intelligence grade paper GUI
+Artificial intelligence grade GUI
