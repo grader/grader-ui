@@ -44,10 +44,6 @@ npm run lint
 npm run lint -- --fix
 ```
 
-## Extra
-
-If you want router permission && generate menu by user roles , you can use this branch [permission-control](https://github.com/PanJiaChen/vue-admin-template/tree/permission-control)
-
 ## Browsers support
 
 Modern browsers and Internet Explorer 10+.
