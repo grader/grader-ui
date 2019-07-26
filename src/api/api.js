@@ -1,5 +1,6 @@
-export const authenticate = '/api/auth/signin'
-export const me = '/api/users/me'
+export const signinApi = '/api/auth/signin'
+export const signoutApi = '/api/auth/signout'
+export const meApi = '/api/users/me'
 
 export const usersApi = '/api/users'
 export const userApi = '/api/users/:userId'
@@ -26,7 +27,3 @@ export const mixSingleChoicesApi = '/api/mixsinglechoices'
 
 export const papersApi = '/api/papers'
 export const paperApi = '/api/papers/:paperId'
-
-export const todosApi = '/api/todos'
-
-

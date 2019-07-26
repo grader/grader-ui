@@ -149,12 +149,14 @@ export const constantRoutes = [
   },
 
   {
-    path: 'external-link',
+    path: '/users',
     component: Layout,
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'users',
+        name: 'Form',
+        component: () => import('@/views/users/users'),
+        meta: { title: 'User Management', icon: 'el-icon-user' }
       }
     ]
   },

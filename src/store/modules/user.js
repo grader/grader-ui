@@ -1,4 +1,5 @@
-import { login, logout, getInfo } from '@/api/user'
+import { signinApi, signoutApi, meApi, usersApi } from '@/api/api'
+import service from '@/utils/request'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -17,6 +18,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_USERS: (state, users) => {
+    state.users = users
   }
 }
 
@@ -25,8 +29,7 @@ const actions = {
   login({ commit }, userInfo) {
     const { usernameOrEmail, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ usernameOrEmail: usernameOrEmail.trim(), password: password }).then(response => {
-        console.log(response)
+      service.post(signinApi, { usernameOrEmail: usernameOrEmail.trim(), password: password }).then(response => {
         commit('SET_TOKEN', response.token)
         setToken(response.token)
         resolve()
@@ -37,16 +40,27 @@ const actions = {
     })
   },
 
+  getUsers({ commit }) {
+    return new Promise((resolve, reject) => {
+      service.get(usersApi).then(response => {
+        commit('SET_USERS', response)
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   // get user info
   getInfo({ commit }) {
     return new Promise((resolve, reject) => {
-      getInfo().then(response => {
+      service.get(meApi).then(response => {
         if (!response) {
           reject('Verification failed, please Login again.')
         }
 
         commit('SET_NAME', response.username)
-        commit('SET_AVATAR', response.avatar)
+        commit('SET_AVATAR', response.profileImageURL)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -57,7 +71,7 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
+      service.get(signoutApi).then(response => {
         commit('SET_TOKEN', '')
         removeToken()
         resetRouter()
