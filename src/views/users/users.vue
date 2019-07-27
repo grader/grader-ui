@@ -1,5 +1,8 @@
 <template>
   <div class="app-container">
+    <el-row>
+      <el-button type="primary" @click="handleCreate">创建用户</el-button>
+    </el-row>
     <el-table
       v-loading="userLoading"
       :data="users"
@@ -8,9 +11,9 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column align="center" label="ID" width="300">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.row._id }}
         </template>
       </el-table-column>
       <el-table-column label="User">
@@ -20,7 +23,7 @@
       </el-table-column>
       <el-table-column label="Role" width="110" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.role }}</span>
+          {{ scope.row.username }}
         </template>
       </el-table-column>
       <el-table-column
@@ -28,12 +31,19 @@
         label="操作"
         width="100">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">删除</el-button>
-          <el-button type="text" size="small">编辑</el-button>
+          <el-popover
+            placement="top"
+            width="160"
+            v-bind:v-model="showModal">
+            <p>确定删除吗？</p>
+            <el-button type="primary" size="mini" @click="handleDelete(scope.row)">确定</el-button>
+            <el-button type="text" slot="reference">删除</el-button>
+          </el-popover>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination
+      background
       @current-change="handleCurrentChange"
       :hide-on-single-page="hidePage"
       :current-page.sync="currentPage"
@@ -49,6 +59,7 @@ export default {
   name: 'Users',
   data() {
     return {
+      showModal: false,
       users: null,
       userLoading: true,
       currentPage: 1,
@@ -79,8 +90,20 @@ export default {
         this.userLoading = false
       })
     },
+    handleCreate() {
+      this.$router.push({ name: 'UserAdd' })
+    },
+    handleDelete(user) {
+      this.showModal = false
+      this.$store.dispatch('user/deleteUser', user).then((response) => {
+        this.fetchData()
+      }).catch(() => {
+
+      })
+    },
     handleCurrentChange(val) {
       this.currentPage = val
+      this.fetchData()
     }
   }
 }

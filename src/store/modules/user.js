@@ -1,4 +1,4 @@
-import { signinApi, signoutApi, meApi, usersApi } from '@/api/api'
+import { signinApi, signoutApi, meApi, usersApi, userApi } from '@/api/api'
 import service from '@/utils/request'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
@@ -45,6 +45,29 @@ const actions = {
       service.get(usersApi, {
         params: options
       }).then(response => {
+        commit('SET_USERS', response)
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  addUser({ commit }, user) {
+    return new Promise((resolve, reject) => {
+      service.post(usersApi, user).then(response => {
+        commit('SET_USERS', response)
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  deleteUser({ commit }, user) {
+    const deleteUserApi = userApi.replace(':userId', user._id)
+    return new Promise((resolve, reject) => {
+      service.delete(deleteUserApi).then(response => {
         commit('SET_USERS', response)
         resolve(response)
       }).catch(error => {

@@ -154,9 +154,14 @@ export const constantRoutes = [
     children: [
       {
         path: 'users',
-        name: 'Form',
+        name: 'Users',
         component: () => import('@/views/users/users'),
         meta: { title: 'User Management', icon: 'el-icon-user' }
+      },
+      {
+        path: 'add',
+        name: 'UserAdd',
+        component: () => import('@/views/users/userAdd')
       }
     ]
   },
