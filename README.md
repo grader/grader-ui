@@ -13,7 +13,7 @@ cd grader-ui
 npm install
 
 # develop
-npm run dev
+npm start
 ```
 
 This will automatically open http://localhost:9528

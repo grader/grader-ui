@@ -40,9 +40,11 @@ const actions = {
     })
   },
 
-  getUsers({ commit }) {
+  getUsers({ commit }, options) {
     return new Promise((resolve, reject) => {
-      service.get(usersApi).then(response => {
+      service.get(usersApi, {
+        params: options
+      }).then(response => {
         commit('SET_USERS', response)
         resolve(response)
       }).catch(error => {

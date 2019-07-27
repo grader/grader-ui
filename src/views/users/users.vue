@@ -33,6 +33,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+      @current-change="handleCurrentChange"
+      :hide-on-single-page="hidePage"
+      :current-page.sync="currentPage"
+      :page-size="10"
+      layout="total, prev, pager, next"
+      :total="total">
+    </el-pagination>
   </div>
 </template>
 
@@ -42,7 +50,18 @@ export default {
   data() {
     return {
       users: null,
-      userLoading: true
+      userLoading: true,
+      currentPage: 1,
+      total: 0
+    }
+  },
+  computed: {
+    hidePage: function() {
+      return this.total < 10
+    }
+  },
+  watch: {
+    currentPage: function(val) {
     }
   },
   created() {
@@ -50,13 +69,18 @@ export default {
   },
   methods: {
     fetchData() {
-      this.listLoading = true
-      this.$store.dispatch('user/getUsers').then((response) => {
-        this.users = response
+      this.userLoading = true
+      this.$store.dispatch('user/getUsers', { page: this.currentPage }).then((response) => {
+        this.total = response.total
+        this.users = response.docs
+        this.currentPage = parseInt(response.page)
         this.userLoading = false
       }).catch(() => {
         this.userLoading = false
       })
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
     }
   }
 }
