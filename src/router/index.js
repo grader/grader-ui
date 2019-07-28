@@ -150,6 +150,9 @@ export const constantRoutes = [
   {
     path: '/users',
     component: Layout,
+    meta: {
+      title: '用户管理'
+    },
     children: [
       {
         path: 'users',

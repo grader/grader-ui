@@ -16,7 +16,6 @@ const actions = {
       service.get(subjectsApi, {
         params: options
       }).then(response => {
-        commit('SET_USERS', response)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -27,7 +26,6 @@ const actions = {
   addSubject({ commit }, user) {
     return new Promise((resolve, reject) => {
       service.post(subjectsApi, user).then(response => {
-        commit('SET_USERS', response)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -36,11 +34,9 @@ const actions = {
   },
 
   deleteSubject({ commit }, subject) {
-    console.log(subject)
     const deleteSubjectApi = subjectApi.replace(':subjectId', subject._id)
     return new Promise((resolve, reject) => {
       service.delete(deleteSubjectApi).then(response => {
-        commit('SET_USERS', response)
         resolve(response)
       }).catch(error => {
         reject(error)
