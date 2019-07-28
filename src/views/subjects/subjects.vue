@@ -98,8 +98,7 @@ export default {
     handleCreate() {
       this.$router.push({ name: 'SubjectAdd' })
     },
-    handleDelete(subject`11  .`1+
-    +`10`) {
+    handleDelete(subject) {
       this.showModal = false
       this.$store.dispatch('subject/deleteSubject', subject).then((response) => {
         this.fetchData()
