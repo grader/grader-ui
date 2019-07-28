@@ -1,43 +1,23 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="Activity name">
-        <el-input v-model="form.name" />
+      <el-form-item label="User Name">
+        <el-input v-model="form.username" />
       </el-form-item>
-      <el-form-item label="Activity zone">
-        <el-select v-model="form.region" placeholder="please select your zone">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
+      <el-form-item label="Password">
+        <el-input v-model="form.password" />
+      </el-form-item>
+      <el-form-item label="Email">
+        <el-input v-model="form.email" />
+      </el-form-item>
+      <el-form-item label="Role">
+        <el-select v-model="form.role" multiple placeholder="please select role">
+          <el-option label="admin" value="admin" />
+          <el-option label="user" value="user" />
         </el-select>
       </el-form-item>
-      <el-form-item label="Activity time">
-        <el-col :span="11">
-          <el-date-picker v-model="form.date1" type="date" placeholder="Pick a date" style="width: 100%;" />
-        </el-col>
-        <el-col :span="2" class="line">-</el-col>
-        <el-col :span="11">
-          <el-time-picker v-model="form.date2" type="fixed-time" placeholder="Pick a time" style="width: 100%;" />
-        </el-col>
-      </el-form-item>
-      <el-form-item label="Instant delivery">
-        <el-switch v-model="form.delivery" />
-      </el-form-item>
-      <el-form-item label="Activity type">
-        <el-checkbox-group v-model="form.type">
-          <el-checkbox label="Online activities" name="type" />
-          <el-checkbox label="Promotion activities" name="type" />
-          <el-checkbox label="Offline activities" name="type" />
-          <el-checkbox label="Simple brand exposure" name="type" />
-        </el-checkbox-group>
-      </el-form-item>
-      <el-form-item label="Resources">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="Sponsor" />
-          <el-radio label="Venue" />
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Activity form">
-        <el-input v-model="form.desc" type="textarea" />
+      <el-form-item label="Description">
+        <el-input v-model="form.description" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">Create</el-button>
@@ -52,29 +32,21 @@ export default {
   data() {
     return {
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        username: '',
+        password: '',
+        role: [],
+        email: '',
+        description: ''
       }
     }
   },
   methods: {
     onSubmit() {
-      const user = {
-        username: 'tesst' + Math.random() * 100,
-        password: 'dlkkscb234S!df' + Math.random() * 100,
-        firstName: 'mmmmm' + Math.random() * 10,
-        lastName: 'mmmmm' + Math.random() * 10,
-        email: Math.random() * 10 + 'xxxxxxxxxx@hot.com'
-      }
+      const user = this.form
+      user.firstName = 'sdf'
+      user.lastName = 'dfsdf'
       this.$store.dispatch('user/addUser', user).then((response) => {
-        // this.total = response.total
-        // this.users = response.docs
+        this.$router.push({ name: 'Users' })
       }).catch(() => {
 
       })

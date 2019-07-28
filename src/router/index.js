@@ -147,7 +147,6 @@ export const constantRoutes = [
       }
     ]
   },
-
   {
     path: '/users',
     component: Layout,
@@ -162,6 +161,23 @@ export const constantRoutes = [
         path: 'add',
         name: 'UserAdd',
         component: () => import('@/views/users/userAdd')
+      }
+    ]
+  },
+  {
+    path: '/subjects',
+    component: Layout,
+    children: [
+      {
+        path: 'subjects',
+        name: 'Subjects',
+        component: () => import('@/views/subjects/subjects'),
+        meta: { title: 'Subject', icon: 'el-icon-user' }
+      },
+      {
+        path: 'add',
+        name: 'SubjectAdd',
+        component: () => import('@/views/subjects/subjectAdd')
       }
     ]
   },

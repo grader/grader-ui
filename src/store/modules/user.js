@@ -18,9 +18,6 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
-  },
-  SET_USERS: (state, users) => {
-    state.users = users
   }
 }
 
@@ -45,7 +42,6 @@ const actions = {
       service.get(usersApi, {
         params: options
       }).then(response => {
-        commit('SET_USERS', response)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -56,7 +52,6 @@ const actions = {
   addUser({ commit }, user) {
     return new Promise((resolve, reject) => {
       service.post(usersApi, user).then(response => {
-        commit('SET_USERS', response)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -68,7 +63,6 @@ const actions = {
     const deleteUserApi = userApi.replace(':userId', user._id)
     return new Promise((resolve, reject) => {
       service.delete(deleteUserApi).then(response => {
-        commit('SET_USERS', response)
         resolve(response)
       }).catch(error => {
         reject(error)
