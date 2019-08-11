@@ -1,7 +1,20 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-button type="primary" @click="handleCreate">创建用户</el-button>
+      <el-col :span="6">
+        <el-button type="primary" @click="handleCreate">创建用户</el-button>
+      </el-col>
+      <el-col :span="6">
+        <el-dropdown trigger="click">
+      <span class="el-dropdown-link">
+        操作<i class="el-icon-arrow-down el-icon--right"></i>
+      </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item icon="el-icon-delete">删除</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </el-col>
+
     </el-row>
     <el-table
       v-loading="userLoading"
@@ -10,7 +23,11 @@
       border
       fit
       highlight-current-row
+      @selection-change="handleSelectionChange"
     >
+      <el-table-column
+        type="selection">
+      </el-table-column>
       <el-table-column align="center" label="ID" width="300">
         <template slot-scope="scope">
           {{ scope.row._id }}
@@ -23,7 +40,7 @@
       </el-table-column>
       <el-table-column label="Role" width="110" align="center">
         <template slot-scope="scope">
-          {{ scope.row.username }}
+          <span v-for="(item,index) in scope.row.roles" :key="index">{{ item }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -36,7 +53,7 @@
             width="160"
             v-bind:v-model="showModal">
             <p>确定删除吗？</p>
-            <el-button type="primary" size="mini" @click="handleDelete(scope.row)">确定</el-button>
+            <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
             <el-button type="text" slot="reference">删除</el-button>
           </el-popover>
         </template>
@@ -63,7 +80,8 @@ export default {
       users: null,
       userLoading: true,
       currentPage: 1,
-      total: 0
+      total: 0,
+      multipleSelection: null
     }
   },
   computed: {
@@ -76,10 +94,10 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    this.getUsers()
   },
   methods: {
-    fetchData() {
+    getUsers() {
       this.userLoading = true
       this.$store.dispatch('user/getUsers', { page: this.currentPage }).then((response) => {
         this.total = response.total
@@ -93,7 +111,7 @@ export default {
     handleCreate() {
       this.$router.push({ name: 'UserAdd' })
     },
-    handleDelete(user) {
+    deleteUser(user) {
       this.showModal = false
       this.$store.dispatch('user/deleteUser', user).then((response) => {
         this.fetchData()
@@ -104,6 +122,10 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val
       this.fetchData()
+    },
+    handleSelectionChange(val) {
+      console.log(val)
+      this.multipleSelection = val
     }
   }
 }

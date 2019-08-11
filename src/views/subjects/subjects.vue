@@ -41,7 +41,7 @@
             width="160"
             v-bind:v-model="showModal">
             <p>确定删除吗？</p>
-            <el-button type="primary" size="mini" @click="handleDelete(scope.row)">确定</el-button>
+            <el-button type="primary" size="mini" @click="deleteSubject(scope.row)">确定</el-button>
             <el-button type="text" slot="reference">删除</el-button>
           </el-popover>
         </template>
@@ -81,10 +81,10 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    this.getSubjects()
   },
   methods: {
-    fetchData() {
+    getSubjects() {
       this.subjectLoading = true
       this.$store.dispatch('subject/getSubjects', { page: this.currentPage }).then((response) => {
         this.total = response.total
@@ -98,7 +98,7 @@ export default {
     handleCreate() {
       this.$router.push({ name: 'SubjectAdd' })
     },
-    handleDelete(subject) {
+    deleteSubject(subject) {
       this.showModal = false
       this.$store.dispatch('subject/deleteSubject', subject).then((response) => {
         this.fetchData()

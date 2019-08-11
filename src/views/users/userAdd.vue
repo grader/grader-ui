@@ -5,15 +5,24 @@
         <el-input v-model="form.username" />
       </el-form-item>
       <el-form-item label="Password">
-        <el-input v-model="form.password" />
+        <el-input v-model="form.password" show-password />
       </el-form-item>
       <el-form-item label="Email">
         <el-input v-model="form.email" />
       </el-form-item>
       <el-form-item label="Role">
-        <el-select v-model="form.role" multiple placeholder="please select role">
+        <el-select v-model="form.roles" multiple placeholder="please select role">
           <el-option label="admin" value="admin" />
           <el-option label="user" value="user" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Subject">
+        <el-select v-model="form.subjects" multiple placeholder="please select Subject">
+          <el-option
+            v-for="item in subjects"
+            :key="item._id"
+            :label="item.name"
+            :value="item._id" />
         </el-select>
       </el-form-item>
       <el-form-item label="Description">
@@ -31,16 +40,27 @@
 export default {
   data() {
     return {
+      subjects: null,
       form: {
         username: '',
         password: '',
-        role: [],
+        roles: [],
+        subjects: [],
         email: '',
         description: ''
       }
     }
   },
+  created() {
+    this.getSubjects()
+  },
   methods: {
+    getSubjects() {
+      this.$store.dispatch('subject/getSubjects').then((response) => {
+        this.subjects = response.docs
+      }).catch(() => {
+      })
+    },
     onSubmit() {
       const user = this.form
       user.firstName = 'sdf'
