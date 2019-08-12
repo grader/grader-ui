@@ -5,12 +5,12 @@
         <el-button type="primary" @click="handleCreate">创建用户</el-button>
       </el-col>
       <el-col :span="6">
-        <el-dropdown trigger="click">
-      <span class="el-dropdown-link">
-        操作<i class="el-icon-arrow-down el-icon--right"></i>
-      </span>
+        <el-dropdown trigger="click" @command="handleCommand">
+          <span class="el-dropdown-link">
+            操作<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-delete">删除</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-delete" command="delete">删除</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-col>
@@ -28,19 +28,19 @@
       <el-table-column
         type="selection">
       </el-table-column>
-      <el-table-column align="center" label="ID" width="300">
-        <template slot-scope="scope">
-          {{ scope.row._id }}
-        </template>
-      </el-table-column>
-      <el-table-column label="User">
+      <el-table-column label="姓名">
         <template slot-scope="scope">
           {{ scope.row.username }}
         </template>
       </el-table-column>
-      <el-table-column label="Role" width="110" align="center">
+      <el-table-column label="角色" align="center">
         <template slot-scope="scope">
-          <span v-for="(item,index) in scope.row.roles" :key="index">{{ item }}</span>
+          <el-button type="text" v-for="(item,index) in scope.row.roles" :key="index">{{ item }}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="科目" align="center">
+        <template slot-scope="scope">
+          <el-button type="text" v-for="(item,index) in scope.row.subjects" :key="index">{{ item.name }}</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -114,18 +114,32 @@ export default {
     deleteUser(user) {
       this.showModal = false
       this.$store.dispatch('user/deleteUser', user).then((response) => {
-        this.fetchData()
+        this.getUsers()
       }).catch(() => {
 
       })
     },
     handleCurrentChange(val) {
       this.currentPage = val
-      this.fetchData()
+      this.getUsers()
     },
-    handleSelectionChange(val) {
-      console.log(val)
-      this.multipleSelection = val
+    handleSelectionChange(users) {
+      this.multipleSelection = users
+    },
+    handleCommand(command) {
+      const users = this.multipleSelection
+      const userIds = []
+      users && users.forEach(user => {
+        userIds.push(user._id)
+      })
+      switch (command) {
+        case 'delete':
+          this.$store.dispatch('user/batchDeleteUser', userIds).then((response) => {
+            this.getUsers()
+          }).catch(() => {
+
+          })
+      }
     }
   }
 }

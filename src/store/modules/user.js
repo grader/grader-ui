@@ -70,6 +70,18 @@ const actions = {
     })
   },
 
+  batchDeleteUser({ commit }, userIds) {
+    return new Promise((resolve, reject) => {
+      service.delete(usersApi, {
+        params: userIds
+      }).then(response => {
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
   // get user info
   getInfo({ commit }) {
     return new Promise((resolve, reject) => {

@@ -101,14 +101,14 @@ export default {
     deleteSubject(subject) {
       this.showModal = false
       this.$store.dispatch('subject/deleteSubject', subject).then((response) => {
-        this.fetchData()
+        this.getSubjects()
       }).catch(() => {
 
       })
     },
     handleCurrentChange(val) {
       this.currentPage = val
-      this.fetchData()
+      this.getSubjects()
     }
   }
 }

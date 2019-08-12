@@ -17,7 +17,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Subject">
-        <el-select v-model="form.subjects" multiple placeholder="please select Subject">
+        <el-select v-model="form.subjects" @change="onSubjectsChange" multiple placeholder="please select Subject">
           <el-option
             v-for="item in subjects"
             :key="item._id"
@@ -41,6 +41,7 @@ export default {
   data() {
     return {
       subjects: null,
+      selectedSubjects: null,
       form: {
         username: '',
         password: '',
@@ -61,10 +62,25 @@ export default {
       }).catch(() => {
       })
     },
+    onSubjectsChange(subjectIds) {
+      const subjects = this.subjects
+      const newSubjects = []
+
+      subjects && subjects.forEach(item => {
+        subjectIds.forEach(id => {
+          if (id === item._id) {
+            newSubjects.push(item)
+          }
+        })
+      })
+
+      this.selectedSubjects = newSubjects
+    },
     onSubmit() {
       const user = this.form
       user.firstName = 'sdf'
       user.lastName = 'dfsdf'
+      user.subjects = this.selectedSubjects
       this.$store.dispatch('user/addUser', user).then((response) => {
         this.$router.push({ name: 'Users' })
       }).catch(() => {
