@@ -1,5 +1,6 @@
 import { signinApi, signoutApi, meApi, usersApi, userApi } from '@/api/api'
 import service from '@/utils/request'
+import qs from 'qs'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -73,7 +74,12 @@ const actions = {
   batchDeleteUser({ commit }, userIds) {
     return new Promise((resolve, reject) => {
       service.delete(usersApi, {
-        params: userIds
+        params: {
+          id: userIds
+        },
+        paramsSerializer: params => {
+          return qs.stringify(params, { indices: false })
+        }
       }).then(response => {
         resolve(response)
       }).catch(error => {
